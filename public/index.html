@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="alpine.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div x-data="TotalPhoneBillSQL">
+        <div class="form-container">
+            <h1 style="text-align: center;">Carbon Project Registry</h1>
+            <!-- Table nyana -->
+            <h1 style="text-align: center;">Listed Projects</h1>
+            <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Project ID</th>
+                    <th>Scope</th>
+                    <th>Credits Available</th>
+                    <th>Credits Issued</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <template x-for="CarbonTracker">
+                    <tr>
+                     
+                    <td x-text="id"></td>
+                    <td x-text="project_id"></td>
+                    <td x-text="scope"></td>
+                    <td x-text="totalCreditsAvailable"></td>
+                    <td x-text="totalCreditsIssued"></td>
+                  </tr>
+                </template>
+                </tbody>
+              </table>
+              
+           <!-- Create Project -->
+            <label>Carbon Project Name</label>
+            <input type="text" x-model="newProjectId">
+            <label>ID</label>
+            <input type="text" x-model="newScope">
+            <label>Scope</label>
+            <input type="text" x-model="newTotalCreditsAvailable">
+            <label>Credits Available</label>
+            <input type="text" x-model="newCreditsIssued">
+            <label>Credits Issued</label>
+            <button x-on:click="createProject()">Create Project</button>
+            <p x-text="createStatus"></p>
+
+
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
