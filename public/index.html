@@ -2,66 +2,81 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="alpine.js"></script>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="alpine.js"></script>
+  <link rel="stylesheet" href="style.css">
 
-
-    <title>Document</title>
+  <title>Document</title>
 </head>
 
 <body>
-    <div x-data="TotalPhoneBillSQL">
-        <div class="form-container">
-            <h1 style="text-align: center;">Carbon Project Registry</h1>
-            <!-- Table nyana -->
-            <h1 style="text-align: center;">Listed Projects</h1>
-            <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Project ID</th>
-                    <th>Scope</th>
-                    <th>Credits Available</th>
-                    <th>Credits Issued</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    <template x-for="CarbonTracker">
-                    <tr>
-                     
-                    <td x-text="id"></td>
-                    <td x-text="project_id"></td>
-                    <td x-text="scope"></td>
-                    <td x-text="totalCreditsAvailable"></td>
-                    <td x-text="totalCreditsIssued"></td>
-                  </tr>
-                </template>
-                </tbody>
-              </table>
-              
-           <!-- Create Project -->
-            <label>Carbon Project Name</label>
-            <input type="text" x-model="newProjectId">
-            <label>ID</label>
-            <input type="text" x-model="newScope">
-            <label>Scope</label>
-            <input type="text" x-model="newTotalCreditsAvailable">
-            <label>Credits Available</label>
-            <input type="text" x-model="newCreditsIssued">
-            <label>Credits Issued</label>
-            <button x-on:click="createProject()">Create Project</button>
-            <p x-text="createStatus"></p>
+  <div x-data="CarbonTracker">
+    <div class="form-container">
+      <h1 style="text-align: center;">Carbon Project Registry</h1>
+      <h1 style="text-align: center;">Listed Projects</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Project ID</th>
+            <th>Project Name</th>
+            <th>Scope</th>
+            <th>Credits Available</th>
+            <th>Credits Issued</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template x-for="projects in projects">
+            <tr>
+              <td x-text="projects.id"></td>
+              <td x-text="projects.project_id"></td>
+              <td x-text="projects.project_name"></td>
+              <td x-text="projects.scope"></td>
+              <td x-text="projects.totalCreditsAvailable"></td>
+              <td x-text="projects.totalCreditsIssued"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
 
-
-        </div>
+      <!-- Create Project -->
+      <label for="newProjectId">Project ID</label>
+      <input type="text" id="newProjectId" x-model="newProjectId" placeholder="Enter Project ID">
+      <label for="newScope">Project Name</label>
+      <input type="text" id="newProjectName" x-model="newProjectName" placeholder="Enter Project Name">
+      <label for="newScope">Scope</label>
+      <input type="text" id="newScope" x-model="newScope" placeholder="Forestry/Transportation/Chemical">
+      <label for="newCreditsAvailable">Credits Available</label>
+      <input type="number" id="newCreditsAvailable" x-model="newCreditsAvailable" placeholder="Enter credits available">
+      <label for="newCreditsIssued">Credits Issued</label>
+      <input type="number" id="newCreditsIssued" x-model="newCreditsIssued" placeholder="Enter credits issued">
+      <button x-on:click="createProject()">Create Project</button>
+      <p x-text="createStatus"></p>
+      </form>
     </div>
 
+    <!-- Remove Project -->
+    <h2>Remove Project</h2>
+    <label>Project to Remove:</label><input type="text" placeholder="Enter project id" x-model="deleteProject" id="deleteProject">
+    <button x-on:click="deleteProject()">Delete Project</button>
+    <p x-text="deleteStatus"></p>
 
 
+    <!-- Update Project Databse -->
+    <h2>Update Project</h2>
+    <label>Project ID: </label> <input type="text" placeholder="ACR1000" x-model="updateProjectId" id="updateProjectId"><br><br>
+    <label>New Project Name: </label> <input type="text" placeholder="Enter Project Name" x-model="updateProjectName" id="updateProjectName"><br><br>
+    <label>Scope</label> <input type="text" placeholder="Forestry/Transport/Chemical" x-model="updateScope" id="updateScope"><br><br>
+    <label>Credits Available: </label>
+    <input type="number" placeholder="1,000,000" x-model="updateCreditsAvailable" id="updateCreditsAvailable"><br><br>
+    <label>Credits Issued: </label>
+    <input type="number" placeholder="1,000,000" x-model="updateCreditsIssued" id="updateCreditIssued"><br><br>
+    <button x-on:click="updateProject()">Update Project</button>
+    <p x-text="updateStatus"></p>
+  </div>
 </body>
 
 </html>
