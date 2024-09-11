@@ -21,15 +21,21 @@ await db.migrate();
 
 
 app.post('/api/carbon/add', async (req, res) => {
-    const {projects,id,project_id,project_name,total_credits_available,total_credits_issued} = req.body   
-    const total = await db.get(`INSERT INTO projects (id, project_id,project_name,total_credits_available,total_credits_issued) VALUES (?,?,?,NULL,NULL) RETURNING *`, [id,project_id,project_name,total_credits_available,total_credits_issued]);
+    const {project_id,project_name,scope, total_credits_available,total_credits_issued} = req.body   
+    const total = await db.get(`INSERT INTO projects (project_id,project_name,scope,total_credits_available,total_credits_issued) VALUES (?,?,?,?,?) RETURNING *`, [project_id,project_name,scope,total_credits_available,total_credits_issued]);
     res.status(200).json({ message: 'Project Created Successfully'});
 })
 
 app.post('/api/carbon/delete', async(req,res) =>{
-    const {id} = req.body;
-    const total = await db.run(`DELETE FROM projects WHERE id =1`, [id]);
+    const {project_id} = req.body;
+    const total = await db.run(`DELETE FROM projects WHERE project_id =?`, [project_id]);
     res.status(200).json({ message: 'Project Deleted Successfully'});
+})
+
+app.post('/api/carbon/update', async (req, res) => {
+    const {project_id,project_name,scope, total_credits_available,total_credits_issued} = req.body   
+    const total = await db.run(`UPDATE projects SET project_id = ?,project_name = ?,scope = ?,total_credits_available = ?,total_credits_issued = ? WHERE project_id = ?`, [project_id,project_name,scope,total_credits_available,total_credits_issued,project_id]);
+    res.status(200).json({ message: 'Project Updated Successfully'});
 })
 
 const PORT = process.env.PORT || 4003

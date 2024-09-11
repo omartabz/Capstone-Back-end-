@@ -1,11 +1,9 @@
-import axios from "axios"
-
 document.addEventListener('alpine:init', () => {
     Alpine.data('CarbonTracker', function () {
         return {
             title: 'Carbon Project Database',
             projects: [],
-            id:'',
+            id: '',
             projectId: '',
             newProjectId: '',
             newProjectName: '',
@@ -16,49 +14,59 @@ document.addEventListener('alpine:init', () => {
             createStatus: '',
             deleteProject: '',
             deleteStatus: '',
-            updateProjectId:'',
-            updateProjectName:'',
-            updateScope:'',
-            updateCreditsAvailable:'',
-            updateCreditsIssued:'',
+            updateProjectId: '',
+            updateProjectName: '',
+            updateScope: '',
+            updateCreditsAvailable: '',
+            updateCreditsIssued: '',
+            updateStatus:'',
 
-            init() {
-                this.getProjects()
-            },
+            // init() {
+            //     this.getProjects()
+            // },
 
 
             createProject() {
-                axios.post('http://localhost:4003/api/carbonadd/', {
-                    projectId: this.newProjectId,
-                    projectName: this.newProjectName,
+                axios.post('http://localhost:4003/api/carbon/add', {
+                    project_id: this.newProjectId,
+                    project_name: this.newProjectName,
                     scope: this.newScope,
-                    totalCreditsAvailable: this.newCreditsAvailable,
-                    totalCreditsIssued: this.newCreditsIssued
+                    total_credits_available: this.newCreditsAvailable,
+                    total_credits_issued: this.newCreditsIssued
                 }).then(response => {
                     this.createStatus = response.data.message
                     this.newProjectId = ''
                     this.newProjectName = ''
                     this.newScope = ''
                     this.newCreditsAvailable = ''
-                    this.getProjects()
+                    this.newCreditsIssued = ''
+                    // this.getProjects()
                 }).catch(error => (
                     console.log(error)
                 ))
             },
 
-            deleteProject() {
+            removeProject() {
                 return axios.post('http://localhost:4003/api/carbon/delete', {
-                    id: this.deleteProject
+                    project_id: this.deleteProject
                 }).then(response => {
                     this.deleteStatus = response.data.message
-                    this.getProjects()
+                    // this.getProjects()
                 })
             },
-            updateProject(){
-
+            updateProject() {
+                return axios.post('http://localhost:4003/api/carbon/update', {
+                    project_id: this.updateProjectId,
+                    project_name: this.updateProjectName,
+                    scope: this.updateScope,
+                    total_credits_available: this.updateCreditsAvailable,
+                    total_credits_issued: this.updateCreditsIssued
+                }).then(response => {
+                    this.updateStatus = response.data.message
+                    // this.getProjects()
+                })
             }
         }
+        })
     }
-    )
-}
 )
