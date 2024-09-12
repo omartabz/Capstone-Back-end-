@@ -19,10 +19,20 @@ const db = await sqlite.open({
 
 await db.migrate();
 
+app.get('/api/carbon/projects', async (req, res) => {
+    const{projects} = req.body
+      const allProjects = await db.all(`SELECT * FROM projects`);
+      for (const key in allProjects) {  
+            const element = object[key];      
+      }
+      console.log('allProjects:' + allProjects[0].project_id);
+      res.status(200).json({allProjects});
+      
+})
 
 app.post('/api/carbon/add', async (req, res) => {
-    const {project_id,project_name,scope, total_credits_available,total_credits_issued} = req.body   
-    const total = await db.get(`INSERT INTO projects (project_id,project_name,scope,total_credits_available,total_credits_issued) VALUES (?,?,?,?,?) RETURNING *`, [project_id,project_name,scope,total_credits_available,total_credits_issued]);
+    const {project_id,project_name,scope,total_credits_available,total_credits_issued} = req.body   
+    const total = await db.get(`INSERT INTO projects (project_id,project_name,scope,total_credits_available,total_credits_issued) VALUES (?,?,?,?,?)`, [project_id,project_name,scope,total_credits_available,total_credits_issued]);
     res.status(200).json({ message: 'Project Created Successfully'});
 })
 

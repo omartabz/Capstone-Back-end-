@@ -10,7 +10,6 @@ document.addEventListener('alpine:init', () => {
             newScope: '',
             newCreditsAvailable: '',
             newCreditsIssued: '',
-            getProjects: '',
             createStatus: '',
             deleteProject: '',
             deleteStatus: '',
@@ -19,12 +18,32 @@ document.addEventListener('alpine:init', () => {
             updateScope: '',
             updateCreditsAvailable: '',
             updateCreditsIssued: '',
-            updateStatus:'',
+            updateStatus: '',
 
-            // init() {
-            //     this.getProjects()
-            // },
+            init() {
+                this.getProjects()
+            },
+            getProjects() {
+                const ProjectsURL = `http://localhost:4003/api/carbon/projects`;
+                return axios.get(ProjectsURL)
+                    .then(response => {
+                        this.projects = []
+                        const n = response.data.length
+                        for (let i = 0; i < n; i++) {
+                            if (response.data[i].project_id== null) {
+                                continue
+                            }
+                            this.projects.push({
+                                project_id: response.data[i].newProjectId,
+                                project_name: response.data[i].newProjectName,
+                                scope: response.data[i].newScope,
+                                total_credits_available: response.data[i].newCreditsAvailable,
+                                total_credits_issued: response.data[i].newCreditsIssued,
+                            })
+                        }
 
+                    })
+            },
 
             createProject() {
                 axios.post('http://localhost:4003/api/carbon/add', {
@@ -40,7 +59,7 @@ document.addEventListener('alpine:init', () => {
                     this.newScope = ''
                     this.newCreditsAvailable = ''
                     this.newCreditsIssued = ''
-                    // this.getProjects()
+                    this.getProjects()
                 }).catch(error => (
                     console.log(error)
                 ))
@@ -51,7 +70,7 @@ document.addEventListener('alpine:init', () => {
                     project_id: this.deleteProject
                 }).then(response => {
                     this.deleteStatus = response.data.message
-                    // this.getProjects()
+                    this.getProjects()
                 })
             },
             updateProject() {
@@ -63,10 +82,10 @@ document.addEventListener('alpine:init', () => {
                     total_credits_issued: this.updateCreditsIssued
                 }).then(response => {
                     this.updateStatus = response.data.message
-                    // this.getProjects()
+                    this.getProjects()
                 })
             }
         }
-        })
-    }
+    })
+}
 )
